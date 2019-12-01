@@ -17,6 +17,8 @@ type ExecutionResponse struct {
 func Execute(f func(interface{}) ExecutionResponse, params interface{}, timeout time.Duration) ExecutionResponse {
 
 	c1 := make(chan ExecutionResponse, 1)
+	defer close(c1)
+
 	go func(func(interface{}) ExecutionResponse, interface{}) {
 		c1 <- f(params)
 	}(f, params)
